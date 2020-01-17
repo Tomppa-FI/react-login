@@ -1,5 +1,6 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
+import bcrypt from "bcryptjs";
 import "./RegisterForm.css";
 
 class RegisterForm extends React.Component {
@@ -21,7 +22,6 @@ class RegisterForm extends React.Component {
             let errors = this.state.errors;
             switch (key) {
                 case "username":
-
                     //TODO change. Validate whether user already exists in DB.
                     if (this.usernameRegex.test(this.state.username)) {
                         delete(errors.username);
@@ -73,8 +73,10 @@ class RegisterForm extends React.Component {
         }
 
         if (Object.keys(this.state.errors).length === 0) {
+            let _salt = "$2a$10$TA/n/n7wv45LTEUEOlEqf.";
             const user = {
                 username: this.state.username,
+                password: bcrypt.hashSync(this.state.password, _salt),
             }
 
             fetch(`${this.apiURL}/register`, {
@@ -112,8 +114,9 @@ class RegisterForm extends React.Component {
 
     handleChange = event => {
         let name = event.target.name;
+        let value = event.target.value;
         this.setState({
-            [event.target.name]: event.target.value
+            [name]: value
         }, () => {
             this.validateInputs(name);
         })
