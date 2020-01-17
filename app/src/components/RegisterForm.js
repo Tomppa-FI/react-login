@@ -5,6 +5,7 @@ import "./RegisterForm.css";
 class RegisterForm extends React.Component {
     constructor() {
         super();
+        this.apiURL = "https://localhost:8000";
         this.usernameRegex = new RegExp(/^\w{4,12}$/);
         this.passwordRegex = new RegExp(/^(?=.*[A-Z])[A-Za-z0-9!£$%^&*()_+-=[\]{}:@~#,./\\]{8,}$/);
         this.state = {
@@ -76,7 +77,7 @@ class RegisterForm extends React.Component {
                 username: this.state.username,
             }
 
-            fetch("http://localhost:8000/register", {
+            fetch(`${this.apiURL}/register`, {
                 method: "POST",
                 body: JSON.stringify(user),
                 headers: {

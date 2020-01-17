@@ -1,8 +1,11 @@
 import Express from "express";
+import fs from "fs";
+import https from "https";
 const app = Express();
+const HOST = "localhost";
 const PORT = 8000;
-const HOST = "0.0.0.0";
-
+const privKey = fs.readFileSync("../ssl/privatekey.pem")
+const cert = fs.readFileSync("../ssl/cert.pem");
 app.use(Express.json());
 
 app.use((req, res, next) => {
@@ -16,7 +19,9 @@ app.post("/register", (req, res) => {
     console.log(req.body.username);
 })
 
-app.listen(PORT, HOST, () => {
-    console.log(`Listening on ${HOST}:${PORT}`);
-})
-
+https.createServer({
+    key: privKey,
+    cert: cert
+}, app).listen(PORT, HOST, () => {
+    console.log(`Server listening at ${HOST}:${PORT}`)
+});
