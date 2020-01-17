@@ -28,6 +28,7 @@ class App extends React.Component {
             <div className="App">
                 <Router>
                     <Navbar />
+                    
                     <Switch>
                         <Route path="/register">
                             <RegisterForm />
