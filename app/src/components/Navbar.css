@@ -1,0 +1,18 @@
+.Navbar {
+    width: 100%;
+}
+
+.Navbar-list {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    list-style-type: none;
+}
+
+.Navbar-item {
+    padding: 12px 15px;
+}
+
+.Navbar-link {
+    text-decoration: none;
+}
