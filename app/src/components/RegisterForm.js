@@ -1,4 +1,5 @@
 import React from "react";
+import {withRouter} from "react-router-dom";
 import "./RegisterForm.css";
 
 class RegisterForm extends React.Component {
@@ -9,7 +10,6 @@ class RegisterForm extends React.Component {
         this.state = {
             username: "",
             password: "",
-            hash: "",
             status: {},
             errors: {}, 
         }
@@ -71,8 +71,25 @@ class RegisterForm extends React.Component {
             return;
         }
 
-        if (Object.keys(this.state.errors) === 0) {
-            //Send to server.
+        if (Object.keys(this.state.errors).length === 0) {
+            const user = {
+                username: this.state.username,
+            }
+
+            fetch("http://localhost:8000/register", {
+                method: "POST",
+                body: JSON.stringify(user),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+            })
+
+
             status = {
                 statusMsg: <p className="RegisterForm-statusMsg">Registration Successful! You will be redirected in 5 seconds.</p>
             }
@@ -82,6 +99,7 @@ class RegisterForm extends React.Component {
                 this.props.history.push("/");
             }, 5000));
         } else {
+            console.log(this.state.errors);
             status = {
                 statusMsg: <p className="RegisterForm-statusMsg">Errors occured during registration. Please see below.</p>
             }
@@ -120,7 +138,7 @@ class RegisterForm extends React.Component {
                     <div className="RegisterForm-inputContainer">
                         <input 
                             className="RegisterForm-input"
-                            type="new-password"
+                            type="password"
                             name="password"
                             placeholder="Password"
                             onChange={this.handleChange}
@@ -130,7 +148,7 @@ class RegisterForm extends React.Component {
                     <div className="RegisterForm-inputContainer">
                         <input 
                             className="RegisterForm-input"
-                            type="new-password"
+                            type="password"
                             name="confirmPassword"
                             placeholder="Repeat Password"
                             onChange={this.handleChange}
@@ -150,4 +168,4 @@ class RegisterForm extends React.Component {
     }
 }
 
-export default RegisterForm;
+export default withRouter(RegisterForm);
