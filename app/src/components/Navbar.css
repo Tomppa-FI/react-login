@@ -1,18 +1,33 @@
 .Navbar {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Navbar-greeting {
+    color: rgba(200, 200, 200, 1);
+}
+
+.Navbar-logoutBtn {
+    border: none;
+    background: none;
+    color: rgba(200, 200, 200, 0.9);
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
 }
 
 .Navbar-list {
     display: flex;
-    justify-content: flex-end;
-    margin: 0;
     list-style-type: none;
 }
 
 .Navbar-item {
-    padding: 12px 15px;
+    padding: 0 15px;
 }
 
 .Navbar-link {
     text-decoration: none;
+    color: rgba(200, 200, 200, 0.9);
 }

@@ -12,6 +12,7 @@ class RegisterForm extends React.Component {
         this.state = {
             username: "",
             password: "",
+            confirmPassword: "",
             status: {},
             errors: {}, 
         }
@@ -79,7 +80,7 @@ class RegisterForm extends React.Component {
                 password: bcrypt.hashSync(this.state.password, _salt),
             }
 
-            fetch(`${this.apiURL}/register`, {
+            fetch(`${this.apiURL}/user/register`, {
                 method: "POST",
                 body: JSON.stringify(user),
                 headers: {
@@ -87,20 +88,33 @@ class RegisterForm extends React.Component {
                     "Content-Type": "application/json"
                 }
             })
-            .then(response => response.json())
+            .then(response => response)
             .then(response => {
                 console.log(response);
-            })
+                if (response.status === 201) {
+                    status = {
+                        statusMsg: <p className="RegisterForm-statusMsg">Registration Successful! You will be redirected in 5 seconds.</p>
+                    }
+                    this.setState({
+                        status: status
+                    }, () => setTimeout(() => {
+                        this.props.history.push("/");
+                    }, 5000));
+                    return;
+                } else if (response.status === 409) {
+                    status = {
+                        statusMsg: <p className="RegisterForm-statusMsg">This Username is already in use.</p>
+                    }
+                } else if (response.status === 500) {
+                    status = {
+                        statusMsg: <p className="RegisterForm-statusMsg">500 Internal Server Error. Please try again later.</p>
+                    }
+                }
+                this.setState({
+                    status: status,
+                })
+            });
 
-
-            status = {
-                statusMsg: <p className="RegisterForm-statusMsg">Registration Successful! You will be redirected in 5 seconds.</p>
-            }
-            this.setState({
-                status: status
-            }, () => setTimeout(() => {
-                this.props.history.push("/");
-            }, 5000));
         } else {
             console.log(this.state.errors);
             status = {
@@ -121,7 +135,6 @@ class RegisterForm extends React.Component {
             this.validateInputs(name);
         })
     }
-
 
     render() {
         return (
